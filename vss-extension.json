@@ -1,8 +1,8 @@
 {
     "manifestVersion": 1,
     "id": "CalcExtension",
-    "publisher": "JanPollack",
-    "version": "1.0.28",
+    "publisher": "[PublisherID]",
+    "version": "1.0.29",
     "name": "Form Calculator Extension",
     "description": "Calculates the value of two field of a work item during edit.",
     "public": false,
