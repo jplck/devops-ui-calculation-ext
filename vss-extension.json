@@ -1,0 +1,39 @@
+{
+    "manifestVersion": 1,
+    "id": "CalcExtension",
+    "publisher": "JanPollack",
+    "version": "1.0.28",
+    "name": "Form Calculator Extension",
+    "description": "Calculates the value of two field of a work item during edit.",
+    "public": false,
+    "categories": ["Azure Boards"],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "contributions": [
+        {  
+            "id": "sample-work-item-form-observer",
+            "type": "ms.vss-work-web.work-item-notifications",
+            "description": "Gets events about the current work item form for the 'Try Me!' toolbar button",
+            "targets": [
+                "ms.vss-work-web.work-item-form"
+            ],
+            "properties": {
+                "uri": "calcobserver.html"
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "calcobserver.html",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/vss-web-extension-sdk/lib",
+            "addressable": true,
+            "packagePath": "lib"
+        }
+    ]
+}

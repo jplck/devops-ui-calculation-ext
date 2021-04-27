@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calculate value in work item via extension</title>
+</head>
+
+<body>
+    <script src="lib/VSS.SDK.js"></script>
+
+    <script>
+        VSS.init({
+            usePlatformScripts: true
+        });
+
+        VSS.require(["TFS/WorkItemTracking/Services"], function (_WorkItemServices) {
+
+            function getWorkItemFormService() {
+                return _WorkItemServices.WorkItemFormService.getService();
+            }
+
+            async function getFieldValue(name) {
+                var service = await getWorkItemFormService()
+                return await service.getFieldValue(name)
+            }
+
+            async function updateFieldValue(name, value) {
+                var service = await getWorkItemFormService()
+                return await service.setFieldValue(name, value)
+            }
+
+            // Register a listener for the work item page contribution.
+            VSS.register("sample-work-item-form-observer", function () {
+                return {
+                    // Called when the active work item is modified
+                    onFieldChanged: async function (args) {
+
+                        const changedFields = args.changedFields
+                   
+                        if ("Custom.CalcValueFirst" in changedFields || "Custom.CalcValueSecond" in changedFields) {
+                            
+                            const first = await getFieldValue("Custom.CalcValueFirst")
+                            const second = await getFieldValue("Custom.CalcValueSecond")
+                            console.log(first)
+                            console.log(second)
+
+                            if (!isNaN(first) && !isNaN(second) && second !== 0) {
+                                var update = parseInt(first) / parseInt(second)
+                                
+                                await updateFieldValue("Custom.Result", update)
+                            }
+                        }
+                    },
+
+                    // Called when a new work item is being loaded in the UI
+                    onLoaded: function (args) {
+                        console.log("loaded...")
+                    },
+
+                    // Called when the active work item is being unloaded in the UI
+                    onUnloaded: function (args) {
+
+                    },
+
+                    // Called after the work item has been saved
+                    onSaved: function (args) {
+                        console.log("saved...")
+                    },
+
+                    // Called when the work item is reset to its unmodified state (undo)
+                    onReset: function (args) {
+
+                    },
+
+                    // Called when the work item has been refreshed from the server
+                    onRefreshed: function (args) {
+
+                    }
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
